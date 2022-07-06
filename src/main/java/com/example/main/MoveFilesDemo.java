@@ -9,8 +9,12 @@ import org.apache.camel.impl.DefaultCamelContext;
 class FileProcessor implements Processor {
 
     @Override
-    public void process(Exchange exchange) throws Exception {
-
+    public void process(Exchange exchange) {
+        String content = exchange.getIn().getBody(String.class);
+        System.out.println(content);
+        if (content.trim().equalsIgnoreCase("exception")) {
+            throw new IllegalCallerException();
+        }
         System.out.println("Processing..." + exchange.getExchangeId());
     }
 }
@@ -19,7 +23,10 @@ class SimpleRouteBuilder extends RouteBuilder {
 
     @Override
     public void configure() {
-        from("file:input")
+        onException(IllegalCallerException.class)
+                .process(exchange -> System.out.println("Got an exception"));
+
+        from("file:input") //Use file:input?noop=true to leave the file in place
                 .process(new FileProcessor())
                 .to("file:output");
     }
