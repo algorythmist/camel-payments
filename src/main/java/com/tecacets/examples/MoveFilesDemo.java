@@ -1,4 +1,4 @@
-package com.example.main;
+package com.tecacets.examples;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.Exchange;
