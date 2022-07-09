@@ -26,11 +26,14 @@ dependencies {
 	implementation "org.apache.camel.springboot:camel-spring-boot-starter:${camelVersion}"
 	implementation "org.apache.camel.springboot:camel-jackson-starter:${camelVersion}"
 	implementation "org.apache.camel.springboot:camel-rabbitmq-starter:${camelVersion}"
+
 	compileOnly "org.projectlombok:lombok"
 	annotationProcessor "org.projectlombok:lombok"
 	developmentOnly "org.springframework.boot:spring-boot-devtools"
+	//test
 	runtimeOnly "com.h2database:h2"
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	implementation "org.apache.camel:camel-test-spring-junit5:${camelVersion}"
 
 }
 
