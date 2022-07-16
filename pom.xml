@@ -11,6 +11,7 @@
 
 	<modules>
 		<module>examples</module>
+		<module>camel-spring</module>
     </modules>
 
 	<properties>
