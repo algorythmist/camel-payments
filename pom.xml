@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.tecacet</groupId>
-	<artifactId>payments</artifactId>
+	<artifactId>camel-payments</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>camel-payments</name>
 	<packaging>pom</packaging>
@@ -12,7 +12,8 @@
 	<modules>
 		<module>examples</module>
 		<module>camel-spring</module>
-    </modules>
+		<module>prototype</module>
+	</modules>
 
 	<properties>
 		<java.version>17</java.version>
