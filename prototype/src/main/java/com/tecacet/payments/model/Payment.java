@@ -17,6 +17,7 @@ public class Payment {
     }
 
     private Invoice invoice;
+    private PayeeProfile payeeProfile;
     private BigDecimal amount;
     private LocalDate date;
     private Status status;

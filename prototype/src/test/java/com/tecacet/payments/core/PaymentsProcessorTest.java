@@ -1,15 +1,14 @@
 package com.tecacet.payments.core;
 
-import com.tecacet.payments.model.Account;
-import com.tecacet.payments.model.Invoice;
-import com.tecacet.payments.model.Payment;
+import com.tecacet.payments.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PaymentsProcessorTest {
 
@@ -25,7 +24,10 @@ class PaymentsProcessorTest {
                 .minimumAmount(BigDecimal.valueOf(50))
                 .totalAmount(BigDecimal.valueOf(700))
                 .build();
-        Payment payment = paymentsProcessor.payInvoice(account,invoice, BigDecimal.valueOf(40));
+        PayeeProfile payeeProfile = PayeeProfile.builder()
+                .sourceAccount(account)
+                .build();
+        Payment payment = paymentsProcessor.payInvoice(payeeProfile, invoice, BigDecimal.valueOf(40));
         assertEquals(Payment.Status.NOT_PAID, payment.getStatus());
         assertEquals("Balance cannot cover minimum payment due.", payment.getMessage());
     }
@@ -40,7 +42,10 @@ class PaymentsProcessorTest {
                 .minimumAmount(BigDecimal.valueOf(50))
                 .totalAmount(BigDecimal.valueOf(1200))
                 .build();
-        Payment payment = paymentsProcessor.payInvoice(account,invoice, BigDecimal.valueOf(1500));
+        PayeeProfile payeeProfile = PayeeProfile.builder()
+                .sourceAccount(account)
+                .build();
+        Payment payment = paymentsProcessor.payInvoice(payeeProfile, invoice, BigDecimal.valueOf(1500));
         assertEquals(Payment.Status.PARTIALLY_PAID, payment.getStatus());
         assertEquals("Balance cannot cover the full amount.", payment.getMessage());
         assertEquals(BigDecimal.valueOf(1000), payment.getAmount());
@@ -56,7 +61,10 @@ class PaymentsProcessorTest {
                 .minimumAmount(BigDecimal.valueOf(50))
                 .totalAmount(BigDecimal.valueOf(1200))
                 .build();
-        Payment payment = paymentsProcessor.payInvoice(account,invoice, BigDecimal.valueOf(1500));
+        PayeeProfile payeeProfile = PayeeProfile.builder()
+                .sourceAccount(account)
+                .build();
+        Payment payment = paymentsProcessor.payInvoice(payeeProfile, invoice, BigDecimal.valueOf(1500));
         assertEquals(Payment.Status.FULLY_PAID, payment.getStatus());
         assertEquals(BigDecimal.valueOf(1200), payment.getAmount());
     }
@@ -66,6 +74,10 @@ class PaymentsProcessorTest {
         Account account = Account.builder()
                 .maximumWithdrawalLimit(BigDecimal.valueOf(5000))
                 .minimumBalanceRequirement(BigDecimal.valueOf(100))
+                .build();
+
+        PayeeProfile payeeProfile = PayeeProfile.builder()
+                .sourceAccount(account)
                 .build();
 
         Invoice invoice3 = Invoice.builder()
@@ -87,7 +99,9 @@ class PaymentsProcessorTest {
                 .totalAmount(BigDecimal.valueOf(1500))
                 .build();
         List<Payment> payments = paymentsProcessor.payInvoices(account,
-                List.of(invoice3, invoice1, invoice2),
+                Stream.of(invoice3, invoice1, invoice2)
+                        .map(invoice -> new InvoiceProfile(invoice, payeeProfile))
+                        .toList(),
                 BigDecimal.valueOf(2000));
         assertEquals(3, payments.size());
         Payment payment1 = payments.get(0);

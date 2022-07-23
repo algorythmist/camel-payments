@@ -1,17 +1,18 @@
 package com.tecacet.payments.model;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Builder
 @Getter
-@ToString
+@ToString(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Account {
 
+    @ToString.Include
+    @EqualsAndHashCode.Include
+    private String accountIdentifier;
     private BigDecimal minimumBalanceRequirement;
     private BigDecimal maximumWithdrawalLimit;
 
