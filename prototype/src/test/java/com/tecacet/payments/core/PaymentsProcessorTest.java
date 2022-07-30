@@ -98,7 +98,7 @@ class PaymentsProcessorTest {
                 .minimumAmount(BigDecimal.valueOf(50))
                 .totalAmount(BigDecimal.valueOf(1500))
                 .build();
-        List<Payment> payments = paymentsProcessor.payInvoices(account,
+        List<Payment> payments = paymentsProcessor.payInvoices(
                 Stream.of(invoice3, invoice1, invoice2)
                         .map(invoice -> new InvoiceProfile(invoice, payeeProfile))
                         .toList(),

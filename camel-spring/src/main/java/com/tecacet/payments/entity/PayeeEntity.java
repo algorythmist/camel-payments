@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 @Setter(value = AccessLevel.PACKAGE)
 @Getter
 @ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PayeeEntity extends BaseEntity {
+    @EqualsAndHashCode.Include
     private String name;
 }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PaymentsProcessor {
 
-    public List<Payment> payInvoices(Account account, Collection<InvoiceProfile> invoices, BigDecimal balance) {
+    public List<Payment> payInvoices(Collection<InvoiceProfile> invoices, BigDecimal balance) {
         List<InvoiceProfile> invoicesByDueDate =
                 invoices.stream().sorted(Comparator.comparing(InvoiceProfile::getDueDate)).toList();
         List<Payment> payments = new ArrayList<>();

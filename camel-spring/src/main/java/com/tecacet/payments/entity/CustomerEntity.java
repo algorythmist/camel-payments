@@ -10,8 +10,10 @@ import javax.persistence.Entity;
 @NoArgsConstructor(access = AccessLevel.PACKAGE)
 @Setter(value = AccessLevel.PACKAGE)
 @Getter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class CustomerEntity extends BaseEntity {
+    @EqualsAndHashCode.Include
     private String name;
 
 }

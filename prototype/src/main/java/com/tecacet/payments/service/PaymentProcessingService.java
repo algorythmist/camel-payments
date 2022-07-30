@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -41,7 +41,7 @@ public class PaymentProcessingService {
         for (Map.Entry<Account, List<InvoiceProfile>> entry : invoicesByAccount.entrySet()) {
             Account account = entry.getKey();
             var balance = accountBalanceRepository.getAccountBalance(account);
-            allPayments.addAll(paymentsProcessor.payInvoices(account, entry.getValue(), balance));
+            allPayments.addAll(paymentsProcessor.payInvoices(entry.getValue(), balance));
         }
         return allPayments;
     }

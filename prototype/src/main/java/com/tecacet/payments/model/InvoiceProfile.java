@@ -18,7 +18,4 @@ public class InvoiceProfile {
         return payeeProfile.getSourceAccount();
     }
 
-    public PaymentMethod getPaymentMethod() {
-        return payeeProfile.getPaymentMethod();
-    }
 }
