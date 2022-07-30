@@ -35,7 +35,7 @@ class CamelRoutesTest {
     @Test
     void testCustomers() {
         Mockito.when(balanceService.getBalance(Mockito.any(PayeeProfileEntity.class)))
-                .thenReturn(BigDecimal.valueOf(700));
+                .thenReturn(BigDecimal.valueOf(10000));
 
         testData.createTestData(10, 5);
         template.sendBody("direct:customers", null);

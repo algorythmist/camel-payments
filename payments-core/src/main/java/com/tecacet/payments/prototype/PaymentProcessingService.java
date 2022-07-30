@@ -1,9 +1,7 @@
-package com.tecacet.payments.service;
+package com.tecacet.payments.prototype;
 
-import com.tecacet.payments.core.PaymentsProcessor;
+import com.tecacet.payments.processor.PaymentsProcessor;
 import com.tecacet.payments.model.*;
-import com.tecacet.payments.repository.AccountBalanceRepository;
-import com.tecacet.payments.repository.PayeeProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 

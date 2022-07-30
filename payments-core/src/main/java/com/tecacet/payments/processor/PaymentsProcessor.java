@@ -1,4 +1,4 @@
-package com.tecacet.payments.core;
+package com.tecacet.payments.processor;
 
 import com.tecacet.payments.model.*;
 

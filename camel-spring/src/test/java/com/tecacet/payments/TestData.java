@@ -95,8 +95,8 @@ public class TestData {
                 .customer(profile.getCustomer())
                 .payee(profile.getPayee())
                 .dueDate(dueDate)
-                .minimumAmount(BigDecimal.valueOf(100))
-                .totalAmount(BigDecimal.valueOf(1000))
+                .minimumAmount(BigDecimal.valueOf(50))
+                .totalAmount(BigDecimal.valueOf(200))
                 .status(InvoiceEntity.Status.DUE)
                 .build();
     }
