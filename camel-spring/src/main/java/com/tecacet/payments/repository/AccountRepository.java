@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+@Deprecated
 @Repository
 public interface AccountRepository extends JpaRepository<AccountEntity, UUID> {
 }

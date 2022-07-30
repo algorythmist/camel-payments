@@ -9,10 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>prototype</artifactId>
-
-    <name>prototype</name>
-
+    <artifactId>payments-core</artifactId>
 
     <properties>
         <lombok.version>1.18.24</lombok.version>
