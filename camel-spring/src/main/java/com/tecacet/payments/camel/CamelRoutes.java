@@ -2,7 +2,6 @@ package com.tecacet.payments.camel;
 
 import com.tecacet.payments.entity.InvoiceEntity;
 import com.tecacet.payments.entity.PayeeProfileEntity;
-import com.tecacet.payments.entity.PaymentEntity;
 import com.tecacet.payments.model.PaymentPayload;
 import com.tecacet.payments.repository.CustomerRepository;
 import com.tecacet.payments.repository.PayeeProfileRepository;
@@ -12,6 +11,7 @@ import com.tecacet.payments.service.InvoiceService;
 import com.tecacet.payments.service.PaymentService;
 import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.processor.aggregate.GroupedBodyAggregationStrategy;
 import org.apache.camel.processor.aggregate.GroupedExchangeAggregationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -51,18 +51,22 @@ public class CamelRoutes extends RouteBuilder {
                 .parallelProcessing() // parallel process customers
                 .bean(payeeProfileRepository, "findByCustomer") // find payee profiles for this customer
                 .filter(simple("${body.size} != 0"))// filter out empty lists
-                .split(simple("${body}")) // split the list : for each payee profile
+                .split(simple("${body}"), new GroupedBodyAggregationStrategy()) // split the list : for each payee profile
                 .multicast(new GroupedExchangeAggregationStrategy()) // Route each payee profile to three different services:
                 .transform().body()// this returns the payee profile itself
                 .bean(invoiceService, "findInvoices") // This queries all the invoices due for this profile
                 .bean(balanceService, "getBalance") // This gets the account balance from the customer's account
                 .end() // end of multicast: all three routes come together
-                .bean(CamelRoutes.this, "combineExchanges") // combine the results from the serices into a single object
+                .bean(CamelRoutes.this, "combineExchanges") // combine the results from the services into a single object
+                .end() //End of split: aggregate all objects.
                 .bean("paymentService", "payInvoices")
                 .bean(paymentRepository, "saveAll"); // Save the payment objects
         //TODO: transfer service
+
+
     }
 
+    //TODO: GroupedExchangeAggregationStrategy
     public PaymentPayload combineExchanges(Exchange exchange) {
         List<Exchange> exchanges = (List<Exchange>) exchange.getMessage().getBody();
         PaymentPayload payload = new PaymentPayload();

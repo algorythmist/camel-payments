@@ -6,12 +6,12 @@ import com.tecacet.payments.entity.InvoiceEntity;
 import com.tecacet.payments.entity.PayeeProfileEntity;
 import com.tecacet.payments.entity.PaymentEntity;
 import com.tecacet.payments.model.PaymentPayload;
-import com.tecacet.payments.repository.PaymentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,7 +20,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PaymentService {
 
-    public List<PaymentEntity> payInvoices(PaymentPayload payload) {
+    public List<PaymentEntity> payInvoices(List<PaymentPayload> payloads) {
+        return payloads.stream().map(this::payPayeeInvoices).flatMap(Collection::stream).collect(Collectors.toList());
+    }
+
+    private List<PaymentEntity> payPayeeInvoices(PaymentPayload payload) {
         var invoices = payload.getInvoices();
         var profile = payload.getProfile();
         var balance = payload.getAccountBalance();

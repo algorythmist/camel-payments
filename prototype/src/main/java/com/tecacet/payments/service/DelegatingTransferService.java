@@ -11,7 +11,6 @@ public class DelegatingTransferService implements TransferService {
     private final TransferService achService;
     private final TransferService stripeService;
 
-    private final InvoiceRepository invoiceRepository;
 
     @Override
     public void executePayment(Payment payment) {
