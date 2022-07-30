@@ -1,6 +1,5 @@
 package com.tecacet.payments.prototype;
 
-import com.tecacet.payments.model.Customer;
 import com.tecacet.payments.model.CustomerIdentifier;
 import com.tecacet.payments.model.Invoice;
 import com.tecacet.payments.model.PayeeIdentifier;

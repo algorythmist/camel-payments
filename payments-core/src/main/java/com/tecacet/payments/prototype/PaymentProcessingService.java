@@ -2,6 +2,7 @@ package com.tecacet.payments.prototype;
 
 import com.tecacet.payments.model.*;
 import com.tecacet.payments.processor.PaymentsProcessor;
+import com.tecacet.payments.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 
@@ -18,7 +19,7 @@ public class PaymentProcessingService {
 
     private final PayeeProfileRepository payeeProfileRepository;
     private final InvoiceRepository invoiceRepository;
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
     private final PaymentsProcessor paymentsProcessor;
 
     private final DelegatingTransferService transferService;
@@ -37,7 +38,7 @@ public class PaymentProcessingService {
         List<Payment> allPayments = new ArrayList<>();
         for (Map.Entry<AccountIdentifier, List<InvoiceProfile>> entry : invoicesByAccount.entrySet()) {
             AccountIdentifier accountIdentifier = entry.getKey();
-            var account = accountRepository.getAccount(accountIdentifier);
+            var account = accountService.getAccount(accountIdentifier);
             allPayments.addAll(paymentsProcessor.payInvoices(entry.getValue(), account));
         }
         return allPayments;

@@ -1,11 +1,9 @@
-package com.tecacet.payments.prototype;
+package com.tecacet.payments.service;
 
 import com.tecacet.payments.model.Account;
 import com.tecacet.payments.model.AccountIdentifier;
 
-import java.math.BigDecimal;
-
-public interface AccountRepository {
+public interface AccountService {
 
     Account getAccount(AccountIdentifier accountIdentifier);
 }

@@ -2,6 +2,7 @@ package com.tecacet.payments.prototype;
 
 import com.tecacet.payments.model.Payment;
 import com.tecacet.payments.model.PaymentMethod;
+import com.tecacet.payments.service.TransferService;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

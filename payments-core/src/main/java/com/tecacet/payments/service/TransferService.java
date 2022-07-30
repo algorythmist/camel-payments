@@ -1,4 +1,4 @@
-package com.tecacet.payments.prototype;
+package com.tecacet.payments.service;
 
 import com.tecacet.payments.model.Payment;
 
