@@ -16,7 +16,9 @@ class PaymentsProcessorTest {
 
     @Test
     void payInvoice_notEnough() {
+        AccountIdentifier accountIdentifier = new UniversalIdentifier();
         Account account = Account.builder()
+                .accountIdentifier(accountIdentifier)
                 .maximumWithdrawalLimit(BigDecimal.valueOf(1000))
                 .minimumBalanceRequirement(BigDecimal.valueOf(100))
                 .build();
@@ -25,16 +27,19 @@ class PaymentsProcessorTest {
                 .totalAmount(BigDecimal.valueOf(700))
                 .build();
         PayeeProfile payeeProfile = PayeeProfile.builder()
-                .sourceAccount(account)
+                .sourceAccount(accountIdentifier)
                 .build();
-        Payment payment = paymentsProcessor.payInvoice(payeeProfile, invoice, BigDecimal.valueOf(40));
+        InvoiceProfile invoiceProfile = new InvoiceProfile(invoice, payeeProfile);
+        Payment payment = paymentsProcessor.payInvoice(invoiceProfile, account, BigDecimal.valueOf(40));
         assertEquals(Payment.Status.NOT_PAID, payment.getStatus());
         assertEquals("Balance cannot cover minimum payment due.", payment.getMessage());
     }
 
     @Test
     void payInvoice_partial() {
+        AccountIdentifier accountIdentifier = new UniversalIdentifier();
         Account account = Account.builder()
+                .accountIdentifier(accountIdentifier)
                 .maximumWithdrawalLimit(BigDecimal.valueOf(1000))
                 .minimumBalanceRequirement(BigDecimal.valueOf(100))
                 .build();
@@ -43,9 +48,10 @@ class PaymentsProcessorTest {
                 .totalAmount(BigDecimal.valueOf(1200))
                 .build();
         PayeeProfile payeeProfile = PayeeProfile.builder()
-                .sourceAccount(account)
+                .sourceAccount(accountIdentifier)
                 .build();
-        Payment payment = paymentsProcessor.payInvoice(payeeProfile, invoice, BigDecimal.valueOf(1500));
+        InvoiceProfile invoiceProfile = new InvoiceProfile(invoice, payeeProfile);
+        Payment payment = paymentsProcessor.payInvoice(invoiceProfile, account, BigDecimal.valueOf(1500));
         assertEquals(Payment.Status.PARTIALLY_PAID, payment.getStatus());
         assertEquals("Balance cannot cover the full amount.", payment.getMessage());
         assertEquals(BigDecimal.valueOf(1000), payment.getAmount());
@@ -53,7 +59,9 @@ class PaymentsProcessorTest {
 
     @Test
     void payInvoice_full() {
+        AccountIdentifier accountIdentifier = new UniversalIdentifier();
         Account account = Account.builder()
+                .accountIdentifier(accountIdentifier)
                 .maximumWithdrawalLimit(BigDecimal.valueOf(2000))
                 .minimumBalanceRequirement(BigDecimal.valueOf(100))
                 .build();
@@ -62,22 +70,26 @@ class PaymentsProcessorTest {
                 .totalAmount(BigDecimal.valueOf(1200))
                 .build();
         PayeeProfile payeeProfile = PayeeProfile.builder()
-                .sourceAccount(account)
+                .sourceAccount(accountIdentifier)
                 .build();
-        Payment payment = paymentsProcessor.payInvoice(payeeProfile, invoice, BigDecimal.valueOf(1500));
+        InvoiceProfile invoiceProfile = new InvoiceProfile(invoice, payeeProfile);
+        Payment payment = paymentsProcessor.payInvoice(invoiceProfile, account, BigDecimal.valueOf(1500));
         assertEquals(Payment.Status.FULLY_PAID, payment.getStatus());
         assertEquals(BigDecimal.valueOf(1200), payment.getAmount());
     }
 
     @Test
     void payInvoices() {
+        AccountIdentifier accountIdentifier = new UniversalIdentifier();
         Account account = Account.builder()
+                .accountIdentifier(accountIdentifier)
                 .maximumWithdrawalLimit(BigDecimal.valueOf(5000))
                 .minimumBalanceRequirement(BigDecimal.valueOf(100))
+                .balance(BigDecimal.valueOf(2000))
                 .build();
 
         PayeeProfile payeeProfile = PayeeProfile.builder()
-                .sourceAccount(account)
+                .sourceAccount(accountIdentifier)
                 .build();
 
         Invoice invoice3 = Invoice.builder()
@@ -101,8 +113,7 @@ class PaymentsProcessorTest {
         List<Payment> payments = paymentsProcessor.payInvoices(
                 Stream.of(invoice3, invoice1, invoice2)
                         .map(invoice -> new InvoiceProfile(invoice, payeeProfile))
-                        .toList(),
-                BigDecimal.valueOf(2000));
+                        .toList(), account);
         assertEquals(3, payments.size());
         Payment payment1 = payments.get(0);
         assertEquals(invoice1, payment1.getInvoice());

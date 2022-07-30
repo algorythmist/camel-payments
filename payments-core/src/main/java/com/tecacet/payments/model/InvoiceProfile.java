@@ -14,7 +14,7 @@ public class InvoiceProfile {
     private final PayeeProfile payeeProfile;
 
 
-    public Account getAccount() {
+    public AccountIdentifier getAccountIdentifier() {
         return payeeProfile.getSourceAccount();
     }
 
