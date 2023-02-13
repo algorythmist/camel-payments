@@ -1,13 +1,11 @@
 package com.tecacet.payments;
 
-import com.tecacet.payments.entity.AccountEntity;
 import com.tecacet.payments.entity.PayeeProfileEntity;
 import com.tecacet.payments.entity.PaymentEntity;
 import com.tecacet.payments.repository.PaymentRepository;
 import com.tecacet.payments.service.BalanceService;
 import org.apache.camel.ProducerTemplate;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
